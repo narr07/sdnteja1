@@ -41,7 +41,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="card-brutal">
               <div className="flex items-start gap-4">
-                <Users size={32} className="flex-shrink-0" />
+                <Users size={32} className="shrink-0" />
                 <div>
                   <p className="text-5xl font-heading">{schoolData.stats.students}</p>
                   <p className="text-sm font-heading mt-2">Siswa Aktif</p>
@@ -50,7 +50,7 @@ export default function Home() {
             </div>
             <div className="card-brutal">
               <div className="flex items-start gap-4">
-                <BookOpen size={32} className="flex-shrink-0" />
+                <BookOpen size={32} className="shrink-0" />
                 <div>
                   <p className="text-5xl font-heading">{schoolData.stats.teachers}</p>
                   <p className="text-sm font-heading mt-2">Guru Berpengalaman</p>

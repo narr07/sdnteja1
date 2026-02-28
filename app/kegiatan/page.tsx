@@ -54,12 +54,9 @@ export default function KegiatanPage() {
                   })}
                 </p>
               </div>
-              <h2 className="text-2xl font-black mb-3">
+              <h2 className="text-2xl font-black line-clamp-3 mb-3">
                 {activity.title}
               </h2>
-              <p className="text-base font-bold leading-relaxed flex-1">
-                {activity.description}
-              </p>
             </Link>
           ))}
         </div>

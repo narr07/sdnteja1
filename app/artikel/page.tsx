@@ -50,7 +50,7 @@ export default function ArtikelPage() {
                 <div className="border-t-2 border-border mb-4"></div>
 
                 {/* Excerpt */}
-                <p className="text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
+                <p className="text-sm leading-relaxed line-clamp-3 pb-6 flex-1">
                   {article.excerpt}
                 </p>
 

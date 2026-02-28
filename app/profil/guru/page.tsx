@@ -1,12 +1,17 @@
 import Image from 'next/image'
-import { teachers } from '@/lib/data'
+import { sanityFetch } from '@/sanity/lib/live'
+import { GURU_LIST_QUERY } from '@/sanity/lib/queries'
+import { urlFor } from '@/sanity/lib/image'
+import type { GURU_LIST_QUERYResult } from '@/sanity/types'
 
 export const metadata = {
   title: 'Guru - SDN Teja 1',
   description: 'Daftar guru dan staf pengajar SDN Teja 1'
 }
 
-export default function GuruPage() {
+export default async function GuruPage() {
+  const { data: teachers } = await sanityFetch({ query: GURU_LIST_QUERY })
+
   return (
     <div className="bg-background border-b-4 border-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -17,30 +22,44 @@ export default function GuruPage() {
         </div>
 
         {/* Teachers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teachers.map((teacher) => (
-            <div key={teacher.id} className="border-4 border-foreground p-6 bg-background hover:bg-primary hover:text-primary-foreground transition-colors">
-              {/* Photo */}
-              <div className="mb-6 aspect-square relative overflow-hidden border-4 border-foreground">
-                <Image
-                  src={teacher.photo}
-                  alt={teacher.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+        {teachers.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teachers.map((teacher: NonNullable<GURU_LIST_QUERYResult>[number]) => (
+              <div key={teacher._id} className="border-4 border-foreground p-6 bg-background hover:bg-primary hover:text-primary-foreground transition-colors group">
+                {/* Photo */}
+                <div className="mb-6 aspect-square relative overflow-hidden border-4 border-foreground bg-accent">
+                  {teacher.foto ? (
+                    <Image
+                      src={urlFor(teacher.foto).width(800).height(800).url()}
+                      alt={teacher.nama || 'Foto Guru'}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-4xl font-black text-foreground">
+                      ?
+                    </div>
+                  )}
+                </div>
 
-              {/* Info */}
-              <h3 className="text-xl font-black mb-2">{teacher.name}</h3>
-              <p className="text-sm font-black mb-4 bg-primary text-primary-foreground px-3 py-1 w-fit">
-                {teacher.subject}
-              </p>
-              <p className="text-sm font-bold leading-relaxed line-clamp-3">
-                {teacher.bio}
-              </p>
-            </div>
-          ))}
-        </div>
+                {/* Info */}
+                <h3 className="text-xl font-black mb-2">{teacher.nama}</h3>
+                <p className="text-sm font-black mb-4 bg-primary text-primary-foreground group-hover:bg-foreground transition-colors px-3 py-1 w-fit">
+                  {teacher.jabatan || 'Guru'}
+                </p>
+                {teacher.bio && (
+                  <p className="text-sm font-bold leading-relaxed line-clamp-3">
+                    {teacher.bio}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="border-4 border-foreground p-8 text-center bg-accent text-accent-foreground font-black text-xl">
+            Belum ada data guru yang ditambahkan.
+          </div>
+        )}
 
         {/* Team Info */}
         <div className="mt-16 border-4 border-foreground p-8 bg-background">
