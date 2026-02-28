@@ -52,7 +52,7 @@ export default async function DataSekolahPage() {
           <h2 className="text-3xl font-black mb-8 border-b-4 border-foreground pb-4">Fasilitas Sekolah</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data?.fasilitas && data.fasilitas.length > 0 ? (
-              data.fasilitas.map((facility, idx) => (
+              data.fasilitas.map((facility: string | null, idx: number) => (
                 <div key={idx} className="border-4 border-foreground p-6 flex items-center gap-4 hover:bg-primary hover:text-primary-foreground transition-colors">
                   <div className="w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center font-black">
                     ✓
