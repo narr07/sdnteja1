@@ -15,9 +15,17 @@ export const ARTIKEL_LIST_QUERY = defineQuery(`*[
   slug,
   publishedAt,
   "guruNama": guru->nama,
+  "excerpt": pt::text(isi),
   gambar{
     ...,
-    alt
+    alt,
+    asset->{
+      ...,
+      metadata {
+        lqip,
+        dimensions
+      }
+    }
   }
 }`)
 
@@ -32,7 +40,14 @@ export const ARTIKEL_DETAIL_QUERY = defineQuery(`*[
   "guruNama": guru->nama,
   gambar{
     ...,
-    alt
+    alt,
+    asset->{
+      ...,
+      metadata {
+        lqip,
+        dimensions
+      }
+    }
   },
   isi
 }`)
@@ -48,7 +63,8 @@ export const BERITA_LIST_QUERY = defineQuery(`*[
   _id,
   judul,
   slug,
-  publishedAt
+  publishedAt,
+  "description": pt::text(isi)
 }`)
 
 export const BERITA_DETAIL_QUERY = defineQuery(`*[
@@ -74,7 +90,15 @@ export const GURU_LIST_QUERY = defineQuery(`*[
   nama,
   slug,
   jabatan,
-  foto,
+  foto{
+    ...,
+    asset->{
+      ...,
+      metadata {
+        lqip
+      }
+    }
+  },
   bio
 }`)
 
@@ -86,7 +110,15 @@ export const GURU_DETAIL_QUERY = defineQuery(`*[
   nama,
   slug,
   jabatan,
-  foto,
+  foto{
+    ...,
+    asset->{
+      ...,
+      metadata {
+        lqip
+      }
+    }
+  },
   bio
 }`)
 
@@ -96,26 +128,40 @@ export const GURU_DETAIL_QUERY = defineQuery(`*[
 
 export const KEGIATAN_LIST_QUERY = defineQuery(`*[
   _type == "kegiatan"
+  && defined(slug.current)
 ]|order(date desc){
   _id,
   title,
+  slug,
   date,
-  images[]{
+  "thumbnail": images[0]{
     ...,
-    alt
+    asset->{
+      ...,
+      metadata {
+        lqip
+      }
+    }
   }
 }`)
 
 export const KEGIATAN_DETAIL_QUERY = defineQuery(`*[
   _type == "kegiatan"
-  && _id == $id
+  && slug.current == $slug
 ][0]{
   _id,
   title,
+  slug,
   date,
   images[]{
     ...,
-    alt
+    asset->{
+      ...,
+      metadata {
+        lqip,
+        dimensions
+      }
+    }
   }
 }`)
 

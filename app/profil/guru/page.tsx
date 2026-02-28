@@ -24,36 +24,43 @@ export default async function GuruPage() {
         {/* Teachers Grid */}
         {teachers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teachers.map((teacher: NonNullable<GURU_LIST_QUERYResult>[number]) => (
-              <div key={teacher._id} className="border-4 border-foreground p-6 bg-background hover:bg-primary hover:text-primary-foreground transition-colors group">
-                {/* Photo */}
-                <div className="mb-6 aspect-square relative overflow-hidden border-4 border-foreground bg-accent">
-                  {teacher.foto ? (
-                    <Image
-                      src={urlFor(teacher.foto).width(800).height(800).url()}
-                      alt={teacher.nama || 'Foto Guru'}
-                      fill
-                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-4xl font-black text-foreground">
-                      ?
-                    </div>
+            {teachers.map((teacher: NonNullable<GURU_LIST_QUERYResult>[number]) => {
+              const asset = teacher.foto?.asset as { metadata?: { lqip?: string } } | undefined;
+              const lqip = asset?.metadata?.lqip;
+
+              return (
+                <div key={teacher._id} className="border-4 border-foreground p-6 bg-background hover:bg-primary hover:text-primary-foreground transition-colors group">
+                  {/* Photo */}
+                  <div className="mb-6 aspect-square relative overflow-hidden border-4 border-foreground bg-accent">
+                    {teacher.foto ? (
+                      <Image
+                        src={urlFor(teacher.foto).width(800).height(800).url()}
+                        alt={teacher.nama || 'Foto Guru'}
+                        fill
+                        placeholder={lqip ? "blur" : "empty"}
+                        blurDataURL={lqip || undefined}
+                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-4xl font-black text-foreground">
+                        ?
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <h3 className="text-xl font-black mb-2">{teacher.nama}</h3>
+                  <p className="text-sm font-black mb-4 bg-primary text-primary-foreground group-hover:bg-foreground  group-hover:text-primary transition-colors px-3 py-1 w-fit">
+                    {teacher.jabatan || 'Guru'}
+                  </p>
+                  {teacher.bio && (
+                    <p className="text-sm font-bold leading-relaxed line-clamp-3">
+                      {teacher.bio}
+                    </p>
                   )}
                 </div>
-
-                {/* Info */}
-                <h3 className="text-xl font-black mb-2">{teacher.nama}</h3>
-                <p className="text-sm font-black mb-4 bg-primary text-primary-foreground group-hover:bg-foreground transition-colors px-3 py-1 w-fit">
-                  {teacher.jabatan || 'Guru'}
-                </p>
-                {teacher.bio && (
-                  <p className="text-sm font-bold leading-relaxed line-clamp-3">
-                    {teacher.bio}
-                  </p>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="border-4 border-foreground p-8 text-center bg-accent text-accent-foreground font-black text-xl">

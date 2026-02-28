@@ -11,6 +11,13 @@ export const kegiatanType = defineType({
       type: 'string',
     }),
     defineField({
+      name: 'slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+      },
+    }),
+    defineField({
       name: 'date',
       title: 'Tanggal kegiatan',
       type: 'date', // pakai 'datetime' kalau perlu jam
@@ -24,13 +31,6 @@ export const kegiatanType = defineType({
           name: 'image',
           type: 'image',
           options: {hotspot: true},
-          fields: [
-            defineField({
-              name: 'alt',
-              type: 'string',
-              title: 'Teks alternatif',
-            }),
-          ],
         }),
       ],
       options: {

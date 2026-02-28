@@ -1,4 +1,7 @@
+"use client"
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 
 export default function ProfilLayout({
@@ -6,6 +9,8 @@ export default function ProfilLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
   const profilMenus = [
     { href: '/profil/visi-misi', label: 'Visi Misi' },
     { href: '/profil/guru', label: 'Guru' },
@@ -27,15 +32,23 @@ export default function ProfilLayout({
 
           {/* Submenu */}
           <div className="flex flex-wrap gap-2">
-            {profilMenus.map((menu) => (
-              <Link
-                key={menu.href}
-                href={menu.href}
-                className="border-2 border-black px-6 py-3 font-bold hover:bg-black hover:text-white transition-colors text-sm"
-              >
-                {menu.label}
-              </Link>
-            ))}
+            {profilMenus.map((menu) => {
+              const isActive = pathname === menu.href
+
+              return (
+                <Link
+                  key={menu.href}
+                  href={menu.href}
+                  className={`border-2 border-black px-6 py-3 font-bold transition-colors text-sm ${
+                    isActive
+                      ? 'bg-black text-primary'
+                      : 'hover:bg-black hover:text-white'
+                  }`}
+                >
+                  {menu.label}
+                </Link>
+              )
+            })}
           </div>
         </div>
       </div>
